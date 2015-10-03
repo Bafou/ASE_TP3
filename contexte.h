@@ -16,14 +16,15 @@ enum ctx_state_e {
 };
 
 struct ctx_s {
-  void *esp;
-  void *ebp;
-  func_t *f;
-  unsigned char *stack;
+  void * esp;
+  void * ebp;
+  func_t * f;
+  unsigned char * stack;
   enum ctx_state_e state;
   unsigned int ctx_magic;
-  void *args;
-  struct ctx_s *next,*previous;
+  void * args;
+  struct ctx_s * next;
+  struct ctx_s * previous;
 };
 
 void switch_to_ctx (struct ctx_s *ctx);

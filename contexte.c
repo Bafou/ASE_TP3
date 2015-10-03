@@ -17,6 +17,8 @@ int init_ctx (struct ctx_s *ctx, int stack_size, func_t *f, void *args) {
   ctx->state = CTX_READY;
   ctx->f = f;
   ctx->args= args;
+  ctx->next = NULL;
+  ctx->previous = NULL;
   ctx->ctx_magic = MAGIC;
   return 1;
 }
@@ -43,7 +45,7 @@ struct ctx_s * create_ctx(int stack_size, func_t *f, void * args){
   return tmp;
 }
 
-void exec_f(struct ctx_s ctx) {
+int exec_f(struct ctx_s * ctx) {
   current_ctx->state = CTX_ACTIVATED;
   current_ctx->f(current_ctx->args);
   current_ctx->state = CTX_TERMINATED;
