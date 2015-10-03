@@ -5,6 +5,8 @@
 #ifndef CONTEXTE_H
 #define CONTEXTE_H
 
+#define MAGIC 0xdeadbeef
+
 typedef void (func_t) (void *);
 
 enum ctx_state_e {
@@ -20,7 +22,6 @@ struct ctx_s {
   unsigned char *stack;
   enum ctx_state_e state;
   unsigned int ctx_magic;
-  #define MAGIC 0xdeadbeef
   void *args;
   struct ctx_s *next,*previous;
 };

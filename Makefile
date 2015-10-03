@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-m32
+CFLAGS=-g -m32
 
 all: pingpong pingpongpang
 
@@ -8,6 +8,9 @@ pingpong: pingpong.c
 
 pingpongpang: pingpongpang.c
 	$(CC) -o pingpongpang contexte.c pingpongpang.c $(CFLAGS)
+
+test: pingpongpangtest.c
+	$(CC) -o test contexte.c pingpongpangtest.c $(CFLAGS)
 
 clean:
 	rm -f *~ *.o pingpong pingpongpang

@@ -1,13 +1,11 @@
 /*
- * pingpongpang.c
+ * pingpongpangtest.c
  * Authors : Honoré NINTUNZE & Antoine PETIT
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <assert.h>
 #include "contexte.h"
-
 
 struct ctx_s ctx_ping;
 struct ctx_s ctx_pong;
@@ -19,9 +17,9 @@ func_t f_pang;
 
 int main(int argc, char *argv[])
 {
-  create_ctx(16384,f_ping, NULL);
-  create_ctx(16384,f_pong, NULL);
-  create_ctx(16384,f_pang, NULL);
+  create_ctx(16384,&f_ping, NULL);
+  create_ctx(16384,&f_pong, NULL);
+  create_ctx(16384,&f_pang, NULL);
   yield();
 
   exit(EXIT_SUCCESS);
