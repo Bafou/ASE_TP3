@@ -1,5 +1,5 @@
 /*
- * pingpongpang.c
+ * pingpongpang_y.c
  * Authors : Honoré NINTUNZE & Antoine PETIT
  */
 #include <stdio.h>

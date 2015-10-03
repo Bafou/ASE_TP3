@@ -1,16 +1,26 @@
 CC=gcc
-CFLAGS=-g -m32
+CFLAGS=-m32 -g
+EXEC=pingpong_y pingpongpang_y pingpong
 
-all: pingpong pingpongpang
 
-pingpong: pingpong.c
-	$(CC) -o pingpong contexte.c pingpong.c  $(CFLAGS)
+all: $(EXEC)
 
-pingpongpang: pingpongpang.c
-	$(CC) -o pingpongpang contexte.c pingpongpang.c $(CFLAGS)
+pingpong_y: pingpong_y.c hw/hw.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS)
 
-test: pingpongpangtest.c
-	$(CC) -o test contexte.c pingpongpangtest.c $(CFLAGS)
+pingpongpang_y: pingpongpang_y.c hw/hw.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS)
+
+pingpong: pingpong.c hw/hw.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS)
+
+%.o : %.c
+	$(CC) -o $@ -c $< $(FLAGS)
+
+.PHONY: clean realclean
 
 clean:
-	rm -f *~ *.o pingpong pingpongpang
+	rm -rf *~ *.o
+
+realclean:
+	rm -rf $(EXEC)

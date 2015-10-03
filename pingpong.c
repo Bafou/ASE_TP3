@@ -12,30 +12,31 @@ struct ctx_s ctx_pong;
 
 func_t f_ping;
 func_t f_pong;
+func_t f_pang;
 
 int main (int argc, char *argv[]) {
   create_ctx(16384, &f_ping, NULL);
   create_ctx(16384, &f_pong, NULL);
-  yield();
+  create_ctx(16384, &f_pang, NULL);
+  start_schedule();
   exit(EXIT_SUCCESS);
 }
 
 void f_ping (void *args) {
   while(1) {
-    printf("A");
-    yield();
-    printf("B");
-    yield();
-    printf("C");
-    yield();
+    printf("Ping\n");
   }
 }
 
 void f_pong (void *args) {
   while(1) {
-    printf("1");
-    yield();
-    printf("2");
-    yield();
+    printf("Pong\n");
   }
 }
+
+void f_pang (void *args) {
+  while(1) {
+    printf("Pang\n");
+  }
+}
+
