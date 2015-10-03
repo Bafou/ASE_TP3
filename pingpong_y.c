@@ -9,19 +9,21 @@
 
 void f_ping (void *args) {
   while(1) {
-    printf("Ping\n");
+    printf("A");
+    yield();
+    printf("B");
+    yield();
+    printf("C");
+    yield();
   }
 }
 
 void f_pong (void *args) {
   while(1) {
-    printf("Pong\n");
-  }
-}
-
-void f_pang (void *args) {
-  while(1) {
-    printf("Pang\n");
+    printf("1");
+    yield();
+    printf("2");
+    yield();
   }
 }
 
@@ -29,7 +31,7 @@ void f_pang (void *args) {
 int main (int argc, char *argv[]) {
   create_ctx(16384, &f_ping, NULL);
   create_ctx(16384, &f_pong, NULL);
-  create_ctx(16384, &f_pang, NULL);
-  start_schedule();
+  yield();
   exit(EXIT_SUCCESS);
 }
+

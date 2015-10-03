@@ -1,13 +1,19 @@
 CC=gcc
-CFLAGS=-m32
+CFLAGS=-m32 -g
 
-all: pingpong pingpongpang
+all: pingpong_y pingpongpang_y pingpong
 
-pingpong: pingpong.c
-	$(CC) -o pingpong contexte.c pingpong.c  $(CFLAGS)
+pingpong_y: pingpong_y.o contexte.o hw/hw.o
+	$(CC) -o $@ $^  $(CFLAGS)
 
-pingpongpang: pingpongpang.c
-	$(CC) -o pingpongpang contexte.c pingpongpang.c $(CFLAGS)
+pingpongpang_y: pingpongpang_y.o contexte.o hw/hw.o
+	$(CC) -o $@ $^ $(CFLAGS)
+
+pingpong: pingpong.o contexte.c hw/hw.o
+	$(CC) -o $@ $^  $(CFLAGS)
+
+%.o : %.c
+	$(CC) -c $(FLAGS) -o $@ $<
 
 clean:
-	rm -f *~ *.o pingpong pingpongpang
+	rm -f *~ *.o pingpong_y pingpongpang_y pingpong
