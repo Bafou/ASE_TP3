@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-m32 -g
-EXEC=pingpong_y pingpongpang_y pingpong
+EXEC=pingpong
 
 
 all: $(EXEC)
@@ -20,7 +20,8 @@ pingpong: pingpong.c hw/hw.c contexte.c
 .PHONY: clean realclean
 
 clean:
-	rm -rf *~ *.o
+	rm -rf *~ *.o hw/*.o hw/*~
 
 realclean:
+	make clean
 	rm -rf $(EXEC)

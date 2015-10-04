@@ -35,7 +35,8 @@ void f_pong (void *args) {
 }
 
 void f_pang (void *args) {
-  while(1) {
+  int i;
+  for (i=0; i<300000;++i) {
     printf("Pang\n");
   }
 }
