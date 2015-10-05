@@ -1,18 +1,19 @@
 CC=gcc
 CFLAGS=-m32 -g
+CLIB=-I./include -L./lib -lhardware
 EXEC=pingpong
 
 
 all: $(EXEC)
 
-pingpong_y: pingpong_y.c hw/hw.c contexte.c
-	$(CC) -o $@ $^ $(CFLAGS)
+pingpong_y: pingpong_y.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-pingpongpang_y: pingpongpang_y.c hw/hw.c contexte.c
-	$(CC) -o $@ $^ $(CFLAGS)
+pingpongpang_y: pingpongpang_y.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-pingpong: pingpong.c hw/hw.c contexte.c
-	$(CC) -o $@ $^ $(CFLAGS)
+pingpong: pingpong.c contexte.c
+	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
 %.o : %.c
 	$(CC) -o $@ -c $< $(FLAGS)
