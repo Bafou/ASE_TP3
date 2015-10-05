@@ -14,6 +14,22 @@ static struct ctx_s *current_ctx = NULL;
 /* stack systeme pour gérer les frees sans problème*/
 static struct ctx_s *stack_systeme;
 
+void enqueue(struct ctx_s * queue){
+  if (!current_ctx){
+    queue->next = queue;
+    queue->previous = queue;
+    current_ctx = queue;
+  }
+  else {
+    struct ctx_s * prev = current_ctx->previous;
+    // lier tmp au précédent
+    prev->next = queue;
+    queue->previous = prev;
+    // lier tmp au suivant
+    queue->next = current_ctx;
+    current_ctx->previous = queue;
+  }
+}
 static void
 empty_it(void)
 {
@@ -64,20 +80,7 @@ struct ctx_s * create_ctx(int stack_size, func_t *f, void * args){
   assert(tmp);
   assert(init_ctx(tmp, stack_size, f, args));
 
-  if (!current_ctx){
-    tmp->next = tmp;
-    tmp->previous = tmp;
-    current_ctx = tmp;
-  }
-  else {
-    struct ctx_s * prev = current_ctx->previous;
-    // lier tmp au précédent
-    prev->next = tmp;
-    tmp->previous = prev;
-    // lier tmp au suivant
-    tmp->next = current_ctx;
-    current_ctx->previous = tmp;
-  }
+  enqueue(tmp);
   return tmp;
 }
 
@@ -121,6 +124,62 @@ void switch_to_ctx (struct ctx_s *ctx) {
   if (current_ctx->state == CTX_READY) {
     exec_f(current_ctx);//cette fonction ne revient jamais
   }
+}
+
+void sem_init (struct sem_s *sem, unsigned int val) {
+    sem->count=val;
+    sem->ctx_locked=NULL;
+}
+
+void sem_down (struct sem_s *sem) {
+  _mask(15);
+  if (--(sem->count) <0) {
+    current_ctx->state = CTX_LOCKED;
+    struct ctx_s *next = current_ctx->next;
+    //suppression des liens dans l'ordonnanceur
+    current_ctx->next->previous = current_ctx->previous;
+    current_ctx->previous->next=next;
+
+    //si aucun process n'est bloqué, on ajoute current_ctx
+    if (!sem->ctx_locked){
+      sem->ctx_locked = current_ctx;
+      current_ctx->next = current_ctx->previous = current_ctx;
+    }
+    //si au moins un process est bloqué, on insère en queue
+    else {
+      current_ctx->previous = sem->ctx_locked->previous;
+      sem->ctx_locked->previous->next = current_ctx;
+      current_ctx->next =sem->ctx_locked;
+      sem->ctx_locked->previous = current_ctx;
+    }
+    _mask(0);
+    switch_to_ctx(next);
+  }
+  else{
+    _mask(0);
+  }
+}
+
+void sem_up(struct sem_s * sem){
+  _mask(15);
+  if (++(sem->count) <=0){
+    if (!sem->ctx_locked){
+      exit(EXIT_FAILURE);
+    }
+    else {
+      struct ctx_s * tmp = sem->ctx_locked;
+
+      //supression dans la liste des ctx bloqués
+      tmp->previous->next = tmp->next;
+      tmp->next->previous = tmp->previous;
+      sem->ctx_locked = tmp->previous->next;
+
+      //ajout dans la liste des ctx elligibles par l'ordonnanceur
+      enqueue(tmp);
+      tmp->state = CTX_ACTIVATED;
+    }
+  }
+  _mask(0);
 }
 
 void yield(){
