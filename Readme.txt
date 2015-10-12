@@ -6,7 +6,6 @@ Pour nettoyer le dossier:
 Pour compiler:
 	make
 
-Ceci créera le fichier executable pingpong
+Ceci créera le fichier executable philo
 
-En lançant ./pingpong on constate que à chaque intérruption du timer on switch entre les fonctions ping, pong et pang. 
-Au bout d'un certain temps la fonction pang se termine et on switch uniquement entre ping et pong.
+En lançant ./philo on a le paradoxe des philosophe qui se lance, mais nous n'avons pas réussi a régler un soucis du programme. Il finit sur un assert false au niveau des états des fonctions appelées.
